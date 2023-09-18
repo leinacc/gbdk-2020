@@ -52,3 +52,8 @@ nes-clean:
 	${MAKE} clean-target EXT=nes
 nes:
 	${MAKE} build-target PORT=mos6502 PLAT=nes EXT=nes
+
+sv-clean:
+	${MAKE} clean-target EXT=sv
+sv:
+	${MAKE} build-target PORT=mos6502 PLAT=sv EXT=sv

@@ -11,6 +11,8 @@
   #include <msx/msx.h>
 #elif defined(__TARGET_nes)
   #include <nes/nes.h>
+#elif defined(__TARGET_sv)
+  #include <sv/sv.h>
 #else
   #error Unrecognized port
 #endif

@@ -96,6 +96,7 @@ usage (void)
            "  -Z             generate GameBoy format binary file\n"
            "  -S             generate Sega Master System format binary file\n"
            "  -N             generate Famicom/NES format binary file\n"
+           "  -V             generate Supervision format binary file\n"
            "  -o bytes       skip amount of bytes in binary file\n"
 
            "SMS format options (applicable only with -S option):\n"
@@ -759,6 +760,7 @@ main (int argc, char **argv)
   int gb = 0;
   int sms = 0;
   int nes = 0;
+  int sv = 0;
 
   struct gb_opt_s gb_opt = {.cart_name="",
                             .licensee_str={'0', '0'},
@@ -824,7 +826,7 @@ main (int argc, char **argv)
 
         case 'Z':
           /* generate GameBoy binary file */
-          gb = 1, sms = 0, nes = 0;
+          gb = 1, sms = 0, nes = 0; sv = 0;
           break;
 
         case 'y':
@@ -959,12 +961,17 @@ main (int argc, char **argv)
 
         case 'S':
           /* generate SMS binary file */
-          gb = 0, sms = 1, nes = 0;
+          gb = 0, sms = 1, nes = 0; sv = 0;
           break;
 
         case 'N':
           /* generate iNES binary file */
-          gb = 0, sms = 0, nes = 1;
+          gb = 0, sms = 0, nes = 1; sv = 0;
+          break;
+
+        case 'V':
+          /* generate Supervision binary file */
+          gb = 0, sms = 0, nes = 0; sv = 1;
           break;
 
         case 'x':
@@ -1111,6 +1118,14 @@ main (int argc, char **argv)
       {
         nes_opt.num_prg_banks = gb_opt.nb_rom_banks;
         write_ines_header(fout, &nes_opt);
+        // .ihx file has fixed bank incorrectly placed as first - we fix this when writing out the .nes file.
+        // Write the N-1 switchable banks at .nes file start, skipping the first (fixed) bank
+        fwrite (rom + BANK_SIZE, 1, (pack ? real_size : size) - offset - BANK_SIZE, fout);
+        // Write the fixed bank to end of .nes file
+        fwrite (rom, 1, BANK_SIZE, fout);
+      }
+      else if (sv)
+      {
         // .ihx file has fixed bank incorrectly placed as first - we fix this when writing out the .nes file.
         // Write the N-1 switchable banks at .nes file start, skipping the first (fixed) bank
         fwrite (rom + BANK_SIZE, 1, (pack ? real_size : size) - offset - BANK_SIZE, fout);

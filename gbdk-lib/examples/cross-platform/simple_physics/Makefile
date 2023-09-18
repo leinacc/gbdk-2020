@@ -1,13 +1,15 @@
 # If you move this project you can change the directory
 # to match your GBDK root directory (ex: GBDK_HOME = "C:/GBDK/"
+ifndef GBDK_HOME
 GBDK_HOME = ../../../
+endif
 LCC = $(GBDK_HOME)bin/lcc
 PNG2ASSET = $(GBDK_HOME)/bin/png2asset
 
 # Set platforms to build here, spaced separated. (These are in the separate Makefile.targets)
 # They can also be built/cleaned individually: "make gg" and "make gg-clean"
 # Possible are: gb gbc pocket megaduck sms gg
-TARGETS=gb gbc pocket megaduck sms gg nes
+TARGETS=gb gbc pocket megaduck sms gg nes sv
 
 # Configure platform specific LCC flags here:
 LCCFLAGS_gb      = -Wl-yt0x1B -autobank # Set an MBC for banking (1B-ROM+MBC5+RAM+BATT)
@@ -17,6 +19,7 @@ LCCFLAGS_gbc     = -Wl-yt0x1B -Wm-yc -autobank # Same as .gb with: -Wm-yc (gb & 
 LCCFLAGS_sms     = -autobank
 LCCFLAGS_gg      = -autobank
 LCCFLAGS_nes     = 
+LCCFLAGS_sv      = 
 
 LCCFLAGS += $(LCCFLAGS_$(EXT)) # This adds the current platform specific LCC Flags
 

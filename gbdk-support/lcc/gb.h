@@ -27,6 +27,7 @@
 #define EXT_GG     ".gg"
 #define EXT_MSXDOS ".com"
 #define EXT_NES    ".nes"
+#define EXT_SV     ".sv"
 
 #define ARRAY_LEN(A) (sizeof(A) / sizeof(A[0]))
 

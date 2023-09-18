@@ -41,6 +41,15 @@ arg_entry llist0_defaults_nes[] = {
     {.searchkey= "_ZP=",         .addflag= "-b",.addvalue= "_ZP=0x10",           .found = false},
 };
 
+// Supervision
+arg_entry llist0_defaults_sv[] = {
+    {.searchkey= "_DATA=",       .addflag= "-b",.addvalue= "_DATA=0x0300",       .found = false},
+    {.searchkey= "_CODE=",       .addflag= "-b",.addvalue= "_CODE=0xC000",       .found = false},
+    {.searchkey= "VECTORS=",     .addflag= "-b",.addvalue= "VECTORS=0xFFFA",     .found = false},
+    {.searchkey= "OSEG=",        .addflag= "-b",.addvalue= "OSEG=0x00",          .found = false},
+    {.searchkey= "_ZP=",         .addflag= "-b",.addvalue= "_ZP=0x10",           .found = false},
+};
+
 // Port/Platform specific settings
 //
 // $1 are extra parameters passed using -W
@@ -168,6 +177,24 @@ CLASS classes[] = {
       .postproc     = "",
       .llist0_defaults    = llist0_defaults_nes,
       .llist0_defaults_len= ARRAY_LEN(llist0_defaults_nes),
+    },
+
+    // Supervision
+    { .port         = "mos6502",
+      .plat         = "sv",
+      .default_plat = "sv",
+      .rom_extension=  EXT_SV,
+      .cpp          = "%cpp% %cppdefault% $1 $2 $3",
+      .include      = "%includedefault%",
+      .com          = "%com% %comdefault% -Wa%asdefault% $1 %comflag% $2 -o $3",
+      .as           = "%as_6500% %asdefault% $1 $3 $2",
+      .bankpack     = "%bankpack% -plat=sv -mapper=30 $1 $2",
+      .ld           = "%ld_6808% -a nes -n -i -j $1 %libs_include% $3 %crt0dir% $2",
+      .ihxcheck     = "%ihxcheck% $2 $1",
+      .mkbin        = "%mkbin% -V -yo A -yS $2 $3",
+      .postproc     = "",
+      .llist0_defaults    = llist0_defaults_sv,
+      .llist0_defaults_len= ARRAY_LEN(llist0_defaults_sv),
     }
 
 };
